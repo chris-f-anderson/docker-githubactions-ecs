@@ -1,1 +1,43 @@
-name: 
+name: Build to AWS ECR
+
+on: push
+
+jobs:
+  login-to-aws:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Code Checkout
+      uses: actions/checkout@v4
+
+    - name: Login to AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with: 
+        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.REGION }}
+
+  build-and-push-private-ecr:
+    runs-on: ubuntu-latest
+    needs:
+        build-and-push-private-ecr
+
+    steps: 
+
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to AWSECR
+        uses: docker/login-action@v3
+        with:
+          registry: 975050214249.dkr.ecr.us-east-2.amazonaws.com
+          username: ${{ secrets.ACCESS_KEY }}
+          password: ${{ secrets.SECRET_ACCESS_KEY }}
+        env:
+          aws-region: ${{ secrets.REGION }}
+
+       - name: Build Image
+         run: |
+            docker build -t it-works-again-dec24 .
+            docker tag it-works-again-dec24:latest 975050214249.dkr.ecr.us-east-2.amazonaws.com/it-works-again-dec24:latest
+            docker push 975050214249.dkr.ecr.us-east-2.amazonaws.com/it-works-again-dec24:latest
