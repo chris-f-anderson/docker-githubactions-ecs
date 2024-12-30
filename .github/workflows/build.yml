@@ -28,15 +28,15 @@ jobs:
 
      - name: Login to AWSECR
        uses: docker/login-action@v3
-        with:
+       with:
           registry: 975050214249.dkr.ecr.us-east-2.amazonaws.com
           username: ${{ secrets.ACCESS_KEY }}
           password: ${{ secrets.SECRET_ACCESS_KEY }}
-        env:
+       env:
           aws-region: ${{ secrets.REGION }}
 
-       - name: Build Image
-         run: |
-            docker build -t it-works-again-dec24 .
-            docker tag it-works-again-dec24:latest 975050214249.dkr.ecr.us-east-2.amazonaws.com/it-works-again-dec24:latest
-            docker push 975050214249.dkr.ecr.us-east-2.amazonaws.com/it-works-again-dec24:latest
+      - name: Build Image
+        run: |
+          docker build -t it-works-again-dec24 .
+          docker tag it-works-again-dec24:latest 975050214249.dkr.ecr.us-east-2.amazonaws.com/it-works-again-dec24:latest
+          docker push 975050214249.dkr.ecr.us-east-2.amazonaws.com/it-works-again-dec24:latest
