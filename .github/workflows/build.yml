@@ -23,8 +23,7 @@ jobs:
         build-and-push-private-ecr
 
     steps: 
-
-      - name: Code Checkout
+     - name: Code Checkout
         uses: actions/checkout@v4
 
       - name: Login to AWSECR
